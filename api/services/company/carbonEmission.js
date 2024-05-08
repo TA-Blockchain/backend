@@ -28,34 +28,53 @@ const GetCEByCompany = async (user, args) => {
       'cecontract',
       user.username
     )
-    const result = JSON.parse(
-      await network.contract.submitTransaction('GetCEByPerusahaan', args)
+
+    const ceByPerusahaan = await network.contract.submitTransaction(
+      'GetCEByPerusahaan',
+      args
     )
-    const shNetwork = await fabric.connectToNetwork(
-      user.organizationName,
-      'shcontract',
-      user.username
-    )
-    const listPerjalanan = []
-    for (let i = 0; i < result[0].perjalanan.length; i++) {
-      const perjalanan = JSON.parse(
-        await shNetwork.contract.submitTransaction(
-          'GetShipmentByIdNotFull',
-          result[0].perjalanan[i]
-        )
+
+    const result = bufferToJson(ceByPerusahaan)
+
+    if (result.length > 0) {
+      const shNetwork = await fabric.connectToNetwork(
+        user.organizationName,
+        'shcontract',
+        user.username
       )
 
-      listPerjalanan.push(perjalanan)
-    }
+      const listPerjalanan = []
 
-    result[0].perjalanan = listPerjalanan
-    shNetwork.gateway.disconnect()
-    network.gateway.disconnect()
-    return iResp.buildSuccessResponse(
-      200,
-      'Successfully get all carbon emissions',
-      result
-    )
+      for (let i = 0; i < result[0].perjalanan.length; i++) {
+        const perjalanan = JSON.parse(
+          await shNetwork.contract.submitTransaction(
+            'GetShipmentByIdNotFull',
+            result[0].perjalanan[i]
+          )
+        )
+
+        listPerjalanan.push(perjalanan)
+      }
+
+      result[0].perjalanan = listPerjalanan
+      result[0].isEmpty = false
+      shNetwork.gateway.disconnect()
+      network.gateway.disconnect()
+
+      return iResp.buildSuccessResponse(
+        200,
+        'Successfully get all carbon emissions',
+        result[0]
+      )
+    } else {
+      return iResp.buildSuccessResponse(
+        200,
+        'Successfully get all carbon emissions',
+        {
+          isEmpty: true,
+        }
+      )
+    }
   } catch (error) {
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
   }
