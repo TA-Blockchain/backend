@@ -195,9 +195,11 @@ const complete = async (user, data) => {
       user.username
     )
     // console.log(d ata)
-    const vehicle = await veNetwork.contract.evaluateTransaction(
-      'GetVehicleById',
-      data.idVehicle
+    const vehicle = JSON.parse(
+      await veNetwork.contract.evaluateTransaction(
+        'GetVehicleById',
+        data.idVehicle
+      )
     )
     veNetwork.gateway.disconnect()
 
@@ -233,7 +235,7 @@ const complete = async (user, data) => {
       'cecontract',
       user.username
     )
-    const ceArgs = [uuidv4(), user.idPerusahaan, carbon, data.id]
+    const ceArgs = [uuidv4(), vehicle.divisi.perusahaan, carbon, data.id]
     await ceNetwork.contract.submitTransaction('CreateCE', ...ceArgs)
     return iResp.buildSuccessResponseWithoutData(
       200,
