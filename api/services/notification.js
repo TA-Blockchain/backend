@@ -1,6 +1,7 @@
 const iResp = require('../utils/response.interface.js')
 const fabric = require('../utils/fabric.js')
 const { bufferToJson } = require('../utils/converter.js')
+const carbonTransactionService = require('./carbonTrading/carbonTransaction.js')
 
 const getNotification = async (user) => {
   try {
@@ -49,6 +50,12 @@ const getNotification = async (user) => {
         supplyChain: bufferToJson(supplyChainList),
         carbonSalesProposal: bufferToJson(cspList),
         company: bufferToJson(companyList),
+        carbonTransacation: bufferToJson(
+          carbonTransactionService.getCarbonTransactionByStatusService(
+            user,
+            'approve penjual'
+          )
+        ),
       }
 
       return iResp.buildSuccessResponse(
@@ -112,6 +119,11 @@ const getNotification = async (user) => {
         supplyChainPending: transactionResults.filter(function (item) {
           return item.status == 'Menunggu Persetujuan Perusahaan'
         }),
+        carbonTransactionByProposal: carbonTransactionService
+          .getCarbonTransactionByIdPenjualService(user, user.idPerusahaan)
+          .filter(function (item) {
+            return (item.status = 'pending')
+          }),
       }
 
       return iResp.buildSuccessResponse(

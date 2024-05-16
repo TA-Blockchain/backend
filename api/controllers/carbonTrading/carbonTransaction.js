@@ -48,6 +48,15 @@ const getCarbonTransactionByIdPerusahaan = async (req, res) => {
   res.status(result.code).send(result)
 }
 
+const getCarbonTransactionByIdPenjual = async (req, res) => {
+  const data = req.params.idPerusahaanPenjual
+  const result = await carbonTransactionService.getCarbonTransactionByIdPenjual(
+    req.user,
+    data
+  )
+  res.status(result.code).send(result)
+}
+
 const verifikasiTransferKarbon = async (req, res) => {
   const data = req.body
   const result = await carbonTransactionService.verifikasiTransferKarbon(
@@ -124,6 +133,7 @@ module.exports = {
   remove,
   getCarbonTransactionByIdProposal,
   getCarbonTransactionByIdPerusahaan,
+  getCarbonTransactionByIdPenjual,
   verifikasiTransferKarbonKementrian,
   verifikasiTransferKarbon,
   generateIdentifier,

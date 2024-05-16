@@ -183,6 +183,78 @@ const getCarbonTransactionByIdProposal = async (user, data) => {
   }
 }
 
+const getCarbonTransactionByIdPenjual = async (user, data) => {
+  try {
+    const result = await getCarbonTransactionByIdPenjualService(user, data)
+    return iResp.buildSuccessResponse(
+      200,
+      `Successfully get carbon transaction by penjual id: ${data}`,
+      JSON.parse(result)
+    )
+  } catch (error) {
+    return iResp.buildErrorResponse(500, 'Something wrong', error.message)
+  }
+}
+
+const getCarbonTransactionByIdPenjualService = async (user, data) => {
+  try {
+    const idPerusahaan = data
+    const cspNetwork = await fabric.connectToNetwork(
+      user.organizationName,
+      'cspcontranct',
+      user.username
+    )
+    const carbonSalesProposal = JSON.parse(
+      await cspNetwork.contract.submitTransaction(
+        'GetAllCSPByIdPerusahaan',
+        idPerusahaan
+      )
+    )
+
+    cspNetwork.gateway.disconnect()
+    const ctNetwork = await fabric.connectToNetwork(
+      user.organizationName,
+      'ctcontract',
+      user.username
+    )
+
+    const carbonTransaction = []
+    carbonSalesProposal.map(async (item) => {
+      const result = JSON.parse(
+        await ctNetwork.contract.submitTransaction('GetCTbyIdProposal', item.id)
+      )
+      result.map((item2) => {
+        carbonTransaction.push(item2)
+      })
+    })
+    ctNetwork.gateway.disconnect()
+    return carbonTransaction
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getCarbonTransactionByStatusService = async (user, data) => {
+  try {
+    const status = data
+
+    const ctNetwork = await fabric.connectToNetwork(
+      user.organizationName,
+      'ctcontract',
+      user.username
+    )
+
+    const result = JSON.parse(
+      await ctNetwork.contract.submitTransaction('GetAllCTByStatus', status)
+    )
+
+    ctNetwork.gateway.disconnect()
+    return result
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const verifikasiTransferKarbonKementrian = async (user, data) => {
   try {
     const network = await fabric.connectToNetwork(
@@ -403,6 +475,9 @@ module.exports = {
   getCarbonTransactionByIdPerusahaan,
   getCarbonTransactionByIdProposal,
   verifikasiTransferKarbonKementrian,
+  getCarbonTransactionByIdPenjual,
+  getCarbonTransactionByIdPenjualService,
+  getCarbonTransactionByStatusService,
   verifikasiTransferKarbon,
   generateIdentifier,
   verify,
