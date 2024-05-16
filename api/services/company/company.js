@@ -99,14 +99,15 @@ const create = async (data) => {
   }
 }
 
-const approve = async (user, id) => {
+const approve = async (user, id, data) => {
   try {
     const peNetwork = await fabric.connectToNetwork(
       'kementrian',
       'pecontract',
       user.username
     )
-    await peNetwork.contract.submitTransaction('ApprovePerusahaan', id)
+    args = [id, data]
+    await peNetwork.contract.submitTransaction('ApprovePerusahaan', args)
     let company = await peNetwork.contract.submitTransaction(
       'GetPerusahaanById',
       id
