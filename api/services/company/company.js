@@ -106,8 +106,8 @@ const approve = async (user, id, data) => {
       'pecontract',
       user.username
     )
-    args = [id, data]
-    await peNetwork.contract.submitTransaction('ApprovePerusahaan', args)
+    const args = [id, data]
+    await peNetwork.contract.submitTransaction('ApprovePerusahaan', ...args)
     let company = await peNetwork.contract.submitTransaction(
       'GetPerusahaanById',
       id
