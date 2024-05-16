@@ -253,8 +253,18 @@ func (s *PEContract) GetPerusahaanById(ctx contractapi.TransactionContextInterfa
 }
 
 // ApprovePerusahaan updates the status field of a Perusahaan entity on the ledger.
-func (s *PEContract) ApprovePerusahaan(ctx contractapi.TransactionContextInterface, id string) error {
+func (s *PEContract) ApprovePerusahaan(ctx contractapi.TransactionContextInterface) error {
 	// Retrieve the existing Perusahaan entity from the ledger
+	args := ctx.GetStub().GetStringArgs()[1:]
+	if len(args) != 2 {
+
+	}
+	id:= args[0]
+	kuota :=  args[1]
+	kuotaValue, err := strconv.Atoi(kuota)
+	if(err!=nil) {
+		fmt.Println("Atoi Error:", err)
+	}
 	perusahaan, err := getPerusahaanStateById(ctx, id)
 	if err != nil {
 		return err
@@ -262,7 +272,8 @@ func (s *PEContract) ApprovePerusahaan(ctx contractapi.TransactionContextInterfa
 
 	// Update the status field
 	perusahaan.ApprovalStatus = 1
-
+	perusahaan.SisaKuota = kuotaValue
+	perusahaan.Kuota = kuotaValue
 	// Marshal the updated Perusahaan struct to JSON
 	perusahaanJSON, err := json.Marshal(perusahaan)
 	if err != nil {
@@ -277,6 +288,7 @@ func (s *PEContract) ApprovePerusahaan(ctx contractapi.TransactionContextInterfa
 
 	return nil
 }
+
 // ApprovePerusahaan updates the status field of a Perusahaan entity on the ledger.
 func (s *PEContract) RejectPerusahaan(ctx contractapi.TransactionContextInterface, id string) error {
 	// Retrieve the existing Perusahaan entity from the ledger

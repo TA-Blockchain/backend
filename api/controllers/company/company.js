@@ -20,7 +20,8 @@ const create = async (req, res) => {
 
 const approve = async (req, res) => {
   const id = req.params.companyId
-  const result = await companyService.approve(req.user, id)
+  const kuota = req.body.kuota
+  const result = await companyService.approve(req.user, id, kuota)
 
   res.status(result.code).send(result)
 }
