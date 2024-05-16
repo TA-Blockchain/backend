@@ -290,8 +290,6 @@ func (s *PEContract) ApprovePerusahaan(ctx contractapi.TransactionContextInterfa
 
     return nil
 }
-
-
 // ApprovePerusahaan updates the status field of a Perusahaan entity on the ledger.
 func (s *PEContract) RejectPerusahaan(ctx contractapi.TransactionContextInterface, id string) error {
 	// Retrieve the existing Perusahaan entity from the ledger
