@@ -185,7 +185,7 @@ companyRouter.post(
 
 companyRouter.post(
   '/supply_chain/approve_kementerian/:supplyId',
-  auth.onlyAdminKementerian,
+  auth.onlyKementerian,
   supplyChainController.ApproveKementerian
 )
 
@@ -211,6 +211,7 @@ companyRouter.delete(
 companyRouter.get('/', auth.verifyToken, companyController.getList)
 companyRouter.get('/:companyId', auth.verifyToken, companyController.getById)
 companyRouter.post('/', companyController.create)
+
 companyRouter.put(
   '/approve/:companyId',
   auth.onlyKementerian,

@@ -28,53 +28,36 @@ const GetCEByCompany = async (user, args) => {
       'cecontract',
       user.username
     )
-
-    const ceByPerusahaan = await network.contract.submitTransaction(
-      'GetCEByPerusahaan',
-      args
+    const result = JSON.parse(
+      await network.contract.submitTransaction('GetCEByPerusahaan', args)
     )
-
-    const result = bufferToJson(ceByPerusahaan)
-
-    if (result.length > 0) {
-      const shNetwork = await fabric.connectToNetwork(
-        user.organizationName,
-        'shcontract',
-        user.username
+    const shNetwork = await fabric.connectToNetwork(
+      user.organizationName,
+      'shcontract',
+      user.username
+    )
+    
+    const listPerjalanan = []
+    for (let i = 0; i < result[0].perjalanan.length; i++) {
+      const perjalananResult = await shNetwork.contract.submitTransaction(
+        'GetShipmentByIdNotFull',
+        result[0].perjalanan[i]
       )
 
-      const listPerjalanan = []
-
-      for (let i = 0; i < result[0].perjalanan.length; i++) {
-        const perjalanan = JSON.parse(
-          await shNetwork.contract.submitTransaction(
-            'GetShipmentByIdNotFull',
-            result[0].perjalanan[i]
-          )
-        )
-
+      if (perjalananResult) {
+        const perjalanan = JSON.parse(perjalananResult)
         listPerjalanan.push(perjalanan)
       }
-
-      result[0].perjalanan = listPerjalanan
-      result[0].isEmpty = false
-      shNetwork.gateway.disconnect()
-      network.gateway.disconnect()
-
-      return iResp.buildSuccessResponse(
-        200,
-        'Successfully get all carbon emissions',
-        result[0]
-      )
-    } else {
-      return iResp.buildSuccessResponse(
-        200,
-        'Successfully get all carbon emissions',
-        {
-          isEmpty: true,
-        }
-      )
     }
+
+    result[0].perjalanan = listPerjalanan
+    shNetwork.gateway.disconnect()
+    network.gateway.disconnect()
+    return iResp.buildSuccessResponse(
+      200,
+      'Successfully get all carbon emissions',
+      result
+    )
   } catch (error) {
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
   }

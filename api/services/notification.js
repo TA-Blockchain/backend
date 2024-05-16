@@ -28,7 +28,7 @@ const getNotification = async (user) => {
       )
       const cspList = await CarbonSalesProposal.contract.submitTransaction(
         'GetAllCSPByStatus',
-        'pending'
+        '0'
       )
       supplyChain.gateway.disconnect()
 

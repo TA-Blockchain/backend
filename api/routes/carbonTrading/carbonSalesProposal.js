@@ -16,10 +16,11 @@ salesProposalRouter.get(
 )
 salesProposalRouter.get(
   '/:salesProposalId',
-  auth.onlyAdminPerusahaan,
+  auth.onlyKementerian,
   salesProposalController.getById
 )
 salesProposalRouter.post('/', auth.verifyToken, salesProposalController.create)
+
 salesProposalRouter.put(
   '/:salesProposalId',
   auth.verifyToken,
