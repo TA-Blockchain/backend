@@ -39,7 +39,7 @@ const verifikasiTransferKarbonKementrian = async (req, res) => {
 }
 
 const getCarbonTransactionByIdPerusahaan = async (req, res) => {
-  const data = req.params.carbonTransactionId
+  const data = req.params.idPerusahaan
   const result =
     await carbonTransactionService.getCarbonTransactionByIdPerusahaan(
       req.user,

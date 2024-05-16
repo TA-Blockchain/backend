@@ -135,9 +135,8 @@ const getById = async (user, args) => {
   }
 }
 
-const getCarbonTransactionByIdPerusahaan = async (user, data) => {
+const getCarbonTransactionByIdPerusahaan = async (user, idPerusahaan) => {
   try {
-    const idPerusahaan = data
     const network = await fabric.connectToNetwork(
       user.organizationName,
       'ctcontract',
@@ -147,11 +146,13 @@ const getCarbonTransactionByIdPerusahaan = async (user, data) => {
       'GetCTbyIdPerusahaan',
       idPerusahaan
     )
+
     network.gateway.disconnect()
+
     return iResp.buildSuccessResponse(
       200,
       `Successfully get carbon transaction By Perusahaan ID: ${idPerusahaan}`,
-      JSON.parse(result)
+      bufferToJson(result)
     )
   } catch (error) {
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
@@ -181,6 +182,7 @@ const getCarbonTransactionByIdProposal = async (user, data) => {
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
   }
 }
+
 const verifikasiTransferKarbonKementrian = async (user, data) => {
   try {
     const network = await fabric.connectToNetwork(

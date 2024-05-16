@@ -3,6 +3,7 @@ const salesProposalController = require('../../controllers/carbonTrading/carbonS
 const auth = require('../../middleware/auth.js')
 
 salesProposalRouter.get('/', auth.verifyToken, salesProposalController.getList)
+
 salesProposalRouter.get(
   '/perusahaan/:idPerusahaan',
   auth.onlyAdminPerusahaan,
@@ -11,19 +12,23 @@ salesProposalRouter.get(
 
 salesProposalRouter.get(
   '/status/:status',
-  auth.onlyAdminPerusahaan,
+  auth.onlyKementerian,
   salesProposalController.getAllCspByStatus
 )
 salesProposalRouter.get(
   '/:salesProposalId',
-  auth.onlyKementerian,
+  auth.verifyToken,
   salesProposalController.getById
 )
-salesProposalRouter.post('/', auth.verifyToken, salesProposalController.create)
+salesProposalRouter.post(
+  '/',
+  auth.onlyAdminPerusahaan,
+  salesProposalController.create
+)
 
 salesProposalRouter.put(
   '/:salesProposalId',
-  auth.verifyToken,
+  auth.onlyKementerian,
   salesProposalController.update
 )
 salesProposalRouter.delete(

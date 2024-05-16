@@ -64,6 +64,7 @@ const create = async (user, args) => {
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
   }
 }
+
 const getAllCspPerusahaan = async (user, args) => {
   try {
     const idPerusahaan = args
@@ -87,6 +88,7 @@ const getAllCspPerusahaan = async (user, args) => {
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
   }
 }
+
 const getAllCspByStatus = async (user, args) => {
   try {
     const status = args
