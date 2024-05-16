@@ -233,7 +233,11 @@ const complete = async (user, data) => {
       'cecontract',
       user.username
     )
-    const ceArgs = [uuidv4(), user.idPerusahaan, carbon, data.id]
+
+    const vehicleData = JSON.parse(vehicle)
+
+    const ceArgs = [uuidv4(), vehicleData.divisi.perusahaan, carbon, data.id]
+
     await ceNetwork.contract.submitTransaction('CreateCE', ...ceArgs)
     return iResp.buildSuccessResponseWithoutData(
       200,
