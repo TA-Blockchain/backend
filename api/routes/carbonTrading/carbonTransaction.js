@@ -22,6 +22,12 @@ carbonTransactionRouter.get(
   auth.onlyAdminPerusahaan,
   carbonTransactionController.getCarbonTransactionByIdPerusahaan
 )
+
+carbonTransactionRouter.get(
+  '/penjual/:idPerusahaanPenjual',
+  auth.onlyAdminPerusahaan,
+  carbonTransactionController.getCarbonTransactionByIdPenjual
+)
 carbonTransactionRouter.post(
   '/identifier/:carbonTransactionId',
   auth.verifyToken,

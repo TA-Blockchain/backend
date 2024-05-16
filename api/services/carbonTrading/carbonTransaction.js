@@ -244,8 +244,9 @@ const getCarbonTransactionByStatusService = async (user, data) => {
       user.username
     )
 
-    const result = JSON.parse(
-      await ctNetwork.contract.submitTransaction('GetAllCTByStatus', status)
+    const result = await ctNetwork.contract.submitTransaction(
+      'GetAllCTByStatus',
+      status
     )
 
     ctNetwork.gateway.disconnect()
