@@ -51,7 +51,7 @@ const getNotification = async (user) => {
         carbonSalesProposal: bufferToJson(cspList),
         company: bufferToJson(companyList),
         carbonTransacation: bufferToJson(
-          carbonTransactionService.getCarbonTransactionByStatusService(
+          await carbonTransactionService.getCarbonTransactionByStatusService(
             user,
             'approve penjual'
           )
