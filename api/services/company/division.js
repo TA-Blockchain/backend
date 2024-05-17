@@ -12,7 +12,7 @@ const getList = async (user, idPerusahaan) => {
       'divcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'ReadAllDivisiByPerusahaan',
       idPerusahaan
     )
@@ -35,7 +35,7 @@ const getListBySupplyChain = async (user, idSupplyChain) => {
       'sccontract',
       user.username
     )
-    const supplyChainResponse = await network.contract.submitTransaction(
+    const supplyChainResponse = await network.contract.evaluateTransaction(
       'GetSCById',
       idSupplyChain
     )
@@ -49,7 +49,7 @@ const getListBySupplyChain = async (user, idSupplyChain) => {
 
     const supplyChain = JSON.parse(supplyChainResponse)
     for (var i = 0; i < supplyChain.listPerusahaan.length; i++) {
-      const result = await divisiNetwork.contract.submitTransaction(
+      const result = await divisiNetwork.contract.evaluateTransaction(
         'ReadAllDivisiByPerusahaan',
         supplyChain.listPerusahaan[i]
       )
@@ -73,7 +73,10 @@ const getById = async (user, id) => {
       'divcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction('GetDivisiById', id)
+    const result = await network.contract.evaluateTransaction(
+      'GetDivisiById',
+      id
+    )
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,

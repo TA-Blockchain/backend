@@ -462,7 +462,7 @@ const getAllManagerByIdPerusahaan = async (user) => {
     user.username
   )
 
-  let result = await network.contract.submitTransaction(
+  let result = await network.contract.evaluateTransaction(
     'GetManagersByCompanyId',
     user.idPerusahaan
   )
@@ -481,7 +481,7 @@ const getAllStafKementerian = async (user) => {
     user.username
   )
 
-  let result = await network.contract.submitTransaction('GetStafKementerian')
+  let result = await network.contract.evaluateTransaction('GetStafKementerian')
 
   return iResp.buildSuccessResponse(
     200,
@@ -556,7 +556,10 @@ const getById = async (user, args) => {
       'usercontract',
       user.username
     )
-    const result = await network.contract.submitTransaction('GetUserById', args)
+    const result = await network.contract.evaluateTransaction(
+      'GetUserById',
+      args
+    )
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,

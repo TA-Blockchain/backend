@@ -11,7 +11,7 @@ const getList = async (user, idDivisi) => {
       'vecontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetVehiclesByDivisi',
       idDivisi
     )
@@ -33,7 +33,7 @@ const getById = async (user, id) => {
       'vecontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetVehicleById',
       id
     )

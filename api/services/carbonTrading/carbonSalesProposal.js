@@ -11,7 +11,7 @@ const getList = async (user) => {
       'cspcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction('ReadAllCSP')
+    const result = await network.contract.evaluateTransaction('ReadAllCSP')
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,
@@ -29,7 +29,7 @@ const getById = async (user, id) => {
       'cspcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction('GetCSPById', id)
+    const result = await network.contract.evaluateTransaction('GetCSPById', id)
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,
@@ -73,7 +73,7 @@ const getAllCspPerusahaan = async (user, args) => {
       'cspcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetAllCSPByIdPerusahaan',
       idPerusahaan
     )
@@ -97,7 +97,7 @@ const getAllCspByStatus = async (user, args) => {
       'cspcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetAllCSPByStatus',
       status
     )

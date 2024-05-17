@@ -12,7 +12,7 @@ const getList = async (user, idPerusahaan) => {
       'shcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetShipmentsByPerusahaan',
       idPerusahaan
     )
@@ -34,7 +34,7 @@ const getById = async (user, shipmentId) => {
       user.username
     )
     const result = JSON.parse(
-      await network.contract.submitTransaction('GetShipmentById', shipmentId)
+      await network.contract.evaluateTransaction('GetShipmentById', shipmentId)
     )
 
     const needApproval = result.status === 'Need Approval'
@@ -66,7 +66,7 @@ const getAllSHByDivisiPengirim = async (user, data) => {
       'shcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetAllSHByDivisiPengirim',
       idDivisi
     )
@@ -88,7 +88,7 @@ const getAllSHByDivisiPenerima = async (user, data) => {
       'shcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetAllSHByDivisiPenerima',
       idDivisi
     )
@@ -111,7 +111,7 @@ const getAllSHByVehicle = async (user, data) => {
       'shcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetAllSHByVehicle',
       idVehicle
     )
@@ -134,7 +134,7 @@ const GetAllSHByCompany = async (user, data) => {
       'shcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetAllSHByCompany',
       idPerusahaan
     )

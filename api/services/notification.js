@@ -15,7 +15,7 @@ const getNotification = async (user) => {
         'sccontract',
         user.username
       )
-      const supplyChainList = await supplyChain.contract.submitTransaction(
+      const supplyChainList = await supplyChain.contract.evaluateTransaction(
         'GetAllSCByStatus',
         'pending'
       )
@@ -27,7 +27,7 @@ const getNotification = async (user) => {
         'cspcontract',
         user.username
       )
-      const cspList = await CarbonSalesProposal.contract.submitTransaction(
+      const cspList = await CarbonSalesProposal.contract.evaluateTransaction(
         'GetAllCSPByStatus',
         '0'
       )
@@ -40,7 +40,7 @@ const getNotification = async (user) => {
         user.username
       )
 
-      const companyList = await Company.contract.submitTransaction(
+      const companyList = await Company.contract.evaluateTransaction(
         'ReadAllPendingPerusahaan'
       )
 
@@ -71,7 +71,7 @@ const getNotification = async (user) => {
         user.username
       )
       const carbonTransactionPerusahaan =
-        await carbonTransactionNet.contract.submitTransaction(
+        await carbonTransactionNet.contract.evaluateTransaction(
           'GetCTbyIdPerusahaan',
           user.idPerusahaan
         )
@@ -89,7 +89,7 @@ const getNotification = async (user) => {
         'pecontract',
         user.username
       )
-      const companyNetResponse = await companyNet.contract.submitTransaction(
+      const companyNetResponse = await companyNet.contract.evaluateTransaction(
         'GetPerusahaanById',
         user.idPerusahaan
       )
@@ -106,7 +106,7 @@ const getNotification = async (user) => {
 
       const transactionResults = await Promise.all(
         listSupplyChain.map(async (idSupplyChain) => {
-          const result = await supplyChainNet.contract.submitTransaction(
+          const result = await supplyChainNet.contract.evaluateTransaction(
             'GetSCById',
             idSupplyChain
           )
@@ -142,7 +142,7 @@ const getNotification = async (user) => {
         'shcontract',
         user.username
       )
-      const shipment = await network.contract.submitTransaction(
+      const shipment = await network.contract.evaluateTransaction(
         'GetShipmentsNeedApprovalByDivisiPenerima',
         user.idDivisi
       )
