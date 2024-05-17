@@ -50,7 +50,7 @@ const getNotification = async (user) => {
         supplyChain: bufferToJson(supplyChainList),
         carbonSalesProposal: bufferToJson(cspList),
         company: bufferToJson(companyList),
-        carbonTransacation: bufferToJson(
+        carbonTransaction: bufferToJson(
           await carbonTransactionService.getCarbonTransactionByStatusService(
             user,
             'approve penjual'
@@ -126,7 +126,7 @@ const getNotification = async (user) => {
         }),
         carbonTransactionByProposal: ctbp
           ? ctbp.filter(function (item) {
-              return (item.status = 'pending')
+              return item.status == 'pending'
             })
           : null,
       }
