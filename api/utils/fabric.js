@@ -49,9 +49,9 @@ const connectToNetwork = async (organizationName, chaincodeName, user) => {
       asLocalhost: false
      },
     // https://stackoverflow.com/questions/56936560/why-do-i-take-more-than-2-seconds-to-just-do-a-transaction
-    eventHandlerOptions: {
-      strategy: null,
-    },
+    // eventHandlerOptions: {
+    //   strategy: null,
+    // },
   })
 
   // Get the network (channel) our contract is deployed to.
@@ -140,7 +140,7 @@ const getSignature = async (txId) => {
 }
 
 const getAllSignature = async (txIds) => {
-  const lstTx = txIds
+  const lstTx = Array.from(txIds)
   await Promise.all(
     lstTx.map(async (item, index) => {
       lstTx[index] = await getSignature(item)

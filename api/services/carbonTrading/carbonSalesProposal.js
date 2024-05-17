@@ -22,14 +22,14 @@ const getList = async (user) => {
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
   }
 }
-const getById = async (user, args) => {
+const getById = async (user, id) => {
   try {
     const network = await fabric.connectToNetwork(
       user.organizationName,
       'cspcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction('GetCSPById', args)
+    const result = await network.contract.submitTransaction('GetCSPById', id)
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,
@@ -64,6 +64,7 @@ const create = async (user, args) => {
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
   }
 }
+
 const getAllCspPerusahaan = async (user, args) => {
   try {
     const idPerusahaan = args
@@ -87,6 +88,7 @@ const getAllCspPerusahaan = async (user, args) => {
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
   }
 }
+
 const getAllCspByStatus = async (user, args) => {
   try {
     const status = args
@@ -118,7 +120,7 @@ const update = async (user, args) => {
       'cspcontract',
       user.username
     )
-    args.idPerusahaan = user.idPerusahaan
+
     await network.contract.submitTransaction('UpdateCSP', JSON.stringify(args))
     network.gateway.disconnect()
     return iResp.buildSuccessResponseWithoutData(

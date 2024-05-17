@@ -33,15 +33,25 @@ const getById = async (user, shipmentId) => {
       'shcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
-      'GetShipmentById',
-      shipmentId
+    const result = JSON.parse(
+      await network.contract.submitTransaction('GetShipmentById', shipmentId)
     )
+
+    const needApproval = result.status === 'Need Approval'
+    const signature = needApproval
+      ? null
+      : await fabric.getSignature(result.TxId)
+
+    const resultWithSignature = {
+      ...result,
+      signature,
+    }
+
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,
       `Successfully get shipment ${shipmentId}`,
-      JSON.parse(result)
+      resultWithSignature
     )
   } catch (error) {
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
@@ -194,7 +204,6 @@ const complete = async (user, data) => {
       'vecontract',
       user.username
     )
-    // console.log(d ata)
     const vehicle = await veNetwork.contract.evaluateTransaction(
       'GetVehicleById',
       data.idVehicle
@@ -233,8 +242,35 @@ const complete = async (user, data) => {
       'cecontract',
       user.username
     )
-    const ceArgs = [uuidv4(), user.idPerusahaan, carbon, data.id]
+
+    const vehicleData = JSON.parse(vehicle)
+
+    const ceArgs = [uuidv4(), vehicleData.divisi.perusahaan, carbon, data.id]
+
     await ceNetwork.contract.submitTransaction('CreateCE', ...ceArgs)
+
+    const peNetwork = await fabric.connectToNetwork(
+      user.organizationName,
+      'pecontract',
+      user.username
+    )
+    const perusahaan = JSON.parse(
+      await peNetwork.contract.submitTransaction(
+        'GetPerusahaanById',
+        vehicleData.divisi.perusahaan
+      )
+    )
+
+    const kuota = perusahaan.sisaKuota - carbon
+    let args = {
+      perusahaan: perusahaan.id,
+      kuota: kuota,
+    }
+    await peNetwork.contract.submitTransaction(
+      'UpdateSisaKuota',
+      JSON.stringify(args)
+    )
+    peNetwork.gateway.disconnect()
     return iResp.buildSuccessResponseWithoutData(
       200,
       'Successfully complete a shipment'
@@ -298,7 +334,6 @@ const verify = async (user, identifier) => {
       .chaincode_spec.input.args
     const idSh = Buffer.from(argsSh[1]).toString()
 
-    console.log('ID Shipment: ', idSh)
     //query data ijazah, transkrip, nilai
     network.gateway.disconnect()
 
@@ -315,7 +350,6 @@ const verify = async (user, identifier) => {
     const parseData = JSON.parse(sh)
 
     parseData.signature = await fabric.getSignature(parseData.TxId)
-    console.log(parseData)
     const data = {
       shipment: parseData,
     }
@@ -327,7 +361,6 @@ const verify = async (user, identifier) => {
     }
     return iResp.buildSuccessResponse(200, 'Successfully get Shipment', result)
   } catch (error) {
-    console.log('ERROR', error)
     const result = {
       success: true,
       message: 'Invoice perjalanan tidak valid.',

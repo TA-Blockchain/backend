@@ -1,6 +1,7 @@
 const iResp = require('../utils/response.interface.js')
 const fabric = require('../utils/fabric.js')
 const { bufferToJson } = require('../utils/converter.js')
+const carbonTransactionService = require('./carbonTrading/carbonTransaction.js')
 
 const getNotification = async (user) => {
   try {
@@ -28,7 +29,7 @@ const getNotification = async (user) => {
       )
       const cspList = await CarbonSalesProposal.contract.submitTransaction(
         'GetAllCSPByStatus',
-        'pending'
+        '0'
       )
       supplyChain.gateway.disconnect()
 
@@ -49,6 +50,12 @@ const getNotification = async (user) => {
         supplyChain: bufferToJson(supplyChainList),
         carbonSalesProposal: bufferToJson(cspList),
         company: bufferToJson(companyList),
+        carbonTransaction: bufferToJson(
+          await carbonTransactionService.getCarbonTransactionByStatusService(
+            user,
+            'approve penjual'
+          )
+        ),
       }
 
       return iResp.buildSuccessResponse(
@@ -106,12 +113,22 @@ const getNotification = async (user) => {
           return JSON.parse(result)
         })
       )
+      const ctbp =
+        await carbonTransactionService.getCarbonTransactionByIdPenjualService(
+          user,
+          user.idPerusahaan
+        )
 
       const result = {
         carbonTransaction: bufferToJson(carbonTransactionQuery),
         supplyChainPending: transactionResults.filter(function (item) {
           return item.status == 'Menunggu Persetujuan Perusahaan'
         }),
+        carbonTransactionByProposal: ctbp
+          ? ctbp.filter(function (item) {
+              return item.status == 'pending'
+            })
+          : null,
       }
 
       return iResp.buildSuccessResponse(

@@ -61,7 +61,7 @@ type PerusahaanResult struct {
 	EmisiKarbon         *EmisiKarbon           `json:"emisiKarbon"`
 	AdminPerusahaan     *Admin                 `json:"adminPerusahaan"`
 	Kuota               int                    `json:"kuota"`
-	SisaKuota           int                    `json:"sisaKuota"`
+	SisaKuota           float64                    `json:"sisaKuota"`
 }
 
 // ganti manajer menjadi admin perusahaan
@@ -79,7 +79,7 @@ type Admin struct {
 }
 type UpdateSisaKuota struct{
 	Perusahaan     		  string               `json:"perusahaan"`
-	Kuota           	  int                  `json:"kuota"`
+	Kuota           	  float64                  `json:"kuota"`
 }
 
 type Perusahaan struct {
@@ -96,7 +96,7 @@ type Perusahaan struct {
 	IdEmisiKarbon       string   `json:"emisiKarbon"`
 	AdminPerusahaan     *Admin   `json:"adminPerusahaan"`
 	Kuota               int      `json:"kuota"`
-	SisaKuota           int      `json:"sisaKuota"`
+	SisaKuota           float64      `json:"sisaKuota"`
 }
 
 // CreateAsset issues a new asset to the world state with given details.
@@ -123,7 +123,7 @@ func (s *PEContract) CreatePerusahaan(ctx contractapi.TransactionContextInterfac
 	SupplyChain := []string{}
 	EmisiKarbon := ""
 	Kuota := 0
-	SisaKuota := 0
+	SisaKuota := "0"
 
 	exists, err := isPeExists(ctx, id)
 	if err != nil {
@@ -132,7 +132,9 @@ func (s *PEContract) CreatePerusahaan(ctx contractapi.TransactionContextInterfac
 	if exists {
 		return fmt.Errorf(id)
 	}
-
+	sisaKuotaInt, err := strconv.ParseFloat(SisaKuota, 64)
+	if err != nil {
+	}
 	pe := Perusahaan{
 		ID:                  id,
 		NomorTelepon:        NomorTelepon,
@@ -146,7 +148,7 @@ func (s *PEContract) CreatePerusahaan(ctx contractapi.TransactionContextInterfac
 		IdEmisiKarbon:       EmisiKarbon,
 		AdminPerusahaan:     adminPerusahaan,
 		Kuota:               Kuota,
-		SisaKuota:           SisaKuota,
+		SisaKuota:           sisaKuotaInt,
 		SupplyChain:         SupplyChain,
 	}
 
@@ -253,29 +255,45 @@ func (s *PEContract) GetPerusahaanById(ctx contractapi.TransactionContextInterfa
 }
 
 // ApprovePerusahaan updates the status field of a Perusahaan entity on the ledger.
-func (s *PEContract) ApprovePerusahaan(ctx contractapi.TransactionContextInterface, id string) error {
-	// Retrieve the existing Perusahaan entity from the ledger
-	perusahaan, err := getPerusahaanStateById(ctx, id)
+func (s *PEContract) ApprovePerusahaan(ctx contractapi.TransactionContextInterface) error {
+    args := ctx.GetStub().GetStringArgs()[1:]
+    if len(args) != 2 {
+        return fmt.Errorf("incorrect number of arguments, expecting 2")
+    }
+
+    id := args[0]
+    kuota := args[1]
+    kuotaValue, err := strconv.Atoi(kuota)
+    if err != nil {
+        return fmt.Errorf("Atoi Error: %v", err)
+    }
+
+    perusahaan, err := getPerusahaanStateById(ctx, id)
+    if err != nil {
+        return fmt.Errorf("failed to get perusahaan state: %v", err)
+    }
+
+	sisaKuotaInt, err := strconv.ParseFloat(kuota, 64)
 	if err != nil {
-		return err
 	}
+    // Update the status field
+    perusahaan.ApprovalStatus = 1
+    perusahaan.SisaKuota = sisaKuotaInt
+    perusahaan.Kuota = kuotaValue
 
-	// Update the status field
-	perusahaan.ApprovalStatus = 1
+    // Marshal the updated Perusahaan struct to JSON
+    perusahaanJSON, err := json.Marshal(perusahaan)
+    if err != nil {
+        return fmt.Errorf("failed to marshal perusahaan: %v", err)
+    }
 
-	// Marshal the updated Perusahaan struct to JSON
-	perusahaanJSON, err := json.Marshal(perusahaan)
-	if err != nil {
-		return err
-	}
+    // Put the updated Perusahaan JSON back to the ledger
+    err = ctx.GetStub().PutState(id, perusahaanJSON)
+    if err != nil {
+        return fmt.Errorf("failed to put perusahaan state: %v", err)
+    }
 
-	// Put the updated Perusahaan JSON back to the ledger
-	err = ctx.GetStub().PutState(id, perusahaanJSON)
-	if err != nil {
-		return err
-	}
-
-	return nil
+    return nil
 }
 // ApprovePerusahaan updates the status field of a Perusahaan entity on the ledger.
 func (s *PEContract) RejectPerusahaan(ctx contractapi.TransactionContextInterface, id string) error {
@@ -515,9 +533,9 @@ func (s *PEContract) UpdatePerusahaan(ctx contractapi.TransactionContextInterfac
 	kuota, err := strconv.Atoi(KuotaStr)
 	if err != nil {
 	}
-	sisaKuota, err := strconv.Atoi(SisaKuotaStr)
-	if err != nil {
-	}
+	// sisaKuota, err := strconv.Atoi(SisaKuotaStr)
+	// if err != nil {
+	// }
 
 	approvalStatus, err := strconv.Atoi(approvalStatusStr)
 	if err != nil {
@@ -536,7 +554,10 @@ func (s *PEContract) UpdatePerusahaan(ctx contractapi.TransactionContextInterfac
 	perusahaan.ApprovalStatus = approvalStatus
 	perusahaan.ParticipantStatus = participantStatus
 	perusahaan.Kuota = kuota
-	perusahaan.SisaKuota = sisaKuota
+	sisaKuotaInt, err := strconv.ParseFloat(SisaKuotaStr, 64)
+	if err != nil {
+	}
+	perusahaan.SisaKuota = sisaKuotaInt
 
 	perusahaanJSON, err := json.Marshal(perusahaan)
 	if err != nil {

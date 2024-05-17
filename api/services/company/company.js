@@ -99,14 +99,15 @@ const create = async (data) => {
   }
 }
 
-const approve = async (user, id) => {
+const approve = async (user, id, data) => {
   try {
     const peNetwork = await fabric.connectToNetwork(
       'kementrian',
       'pecontract',
       user.username
     )
-    await peNetwork.contract.submitTransaction('ApprovePerusahaan', id)
+    const args = [id, data]
+    await peNetwork.contract.submitTransaction('ApprovePerusahaan', ...args)
     let company = await peNetwork.contract.submitTransaction(
       'GetPerusahaanById',
       id
@@ -114,12 +115,32 @@ const approve = async (user, id) => {
     peNetwork.gateway.disconnect()
     company = JSON.parse(company)
 
-    await sendEmail(
-      company.email,
-      `Berikut ini adalah akun untuk website Carbon Supply Chain\n 
-      username: ${company.adminPerusahaan.username}\n 
-      Password: ${company.adminPerusahaan.password}`
-    )
+    const filePath = path.join(process.cwd(), 'wallet', 'user.txt');
+
+    fs.readFile(filePath, 'utf8', async (err, data) => {
+      if (err) {
+        console.error('Error reading the file:', err);
+        return;
+      }
+
+      // Split the file content by new lines
+      const lines = data.split('\n');
+
+      // Find the line that contains the desired username
+      const userLine = lines.find(line => line.startsWith(`${company.adminPerusahaan.username}~`));
+
+      const userPassword = userLine.split('~')[2];
+
+      if (userLine) {
+        await sendEmail(
+          company.email,
+          `Berikut ini adalah akun untuk website Carbon Supply Chain\n 
+          username: ${company.adminPerusahaan.username}\n 
+          Password: ${userPassword}`
+        )
+      } 
+    });
+
     return iResp.buildSuccessResponse(
       200,
       'Successfully approve a company',
