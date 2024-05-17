@@ -123,12 +123,21 @@ const getById = async (user, id) => {
       'ctcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction('GetCTById', id)
+    const result = JSON.parse(
+      await network.contract.submitTransaction('GetCTById', id)
+    )
+
+    const allSignatures = await fabric.getAllSignature(result.HistoryTxId)
+
+    const resultWithTxIds = {
+      ...result,
+      HistoryTxId: allSignatures,
+    }
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,
       `Successfully get carbon transaction ${id}`,
-      JSON.parse(result)
+      resultWithTxIds
     )
   } catch (error) {
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)

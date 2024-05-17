@@ -33,15 +33,22 @@ const getById = async (user, shipmentId) => {
       'shcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
-      'GetShipmentById',
-      shipmentId
+    const result = JSON.parse(
+      await network.contract.submitTransaction('GetShipmentById', shipmentId)
     )
+
+    const signature = await fabric.getSignature(result.TxId)
+
+    const resultWithSignature = {
+      ...result,
+      TxId: signature,
+    }
+
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,
       `Successfully get shipment ${shipmentId}`,
-      JSON.parse(result)
+      resultWithSignature
     )
   } catch (error) {
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
@@ -342,7 +349,6 @@ const verify = async (user, identifier) => {
     const parseData = JSON.parse(sh)
 
     parseData.signature = await fabric.getSignature(parseData.TxId)
-    console.log(parseData)
     const data = {
       shipment: parseData,
     }
