@@ -245,12 +245,13 @@ const complete = async (user, data) => {
       'pecontract',
       user.username
     )
-    const perusahaan = bufferToJson(
-      peNetwork.contract.submitTransaction(
+    const perusahaan = JSON.parse(
+      await peNetwork.contract.submitTransaction(
         'GetPerusahaanById',
         vehicleData.divisi.perusahaan
       )
     )
+
     const kuota = perusahaan.sisaKuota - carbon
     let args = {
       perusahaan: perusahaan.id,
