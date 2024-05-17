@@ -189,7 +189,7 @@ const getCarbonTransactionByIdPenjual = async (user, data) => {
     return iResp.buildSuccessResponse(
       200,
       `Successfully get carbon transaction by penjual id: ${data}`,
-      JSON.parse(result)
+      result
     )
   } catch (error) {
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
@@ -219,7 +219,7 @@ const getCarbonTransactionByIdPenjualService = async (user, data) => {
     )
 
     const carbonTransaction = []
-    carbonSalesProposal.map(async (item) => {
+    const promise = carbonSalesProposal.map(async (item) => {
       const result = JSON.parse(
         await ctNetwork.contract.submitTransaction('GetCTbyIdProposal', item.id)
       )
@@ -227,6 +227,7 @@ const getCarbonTransactionByIdPenjualService = async (user, data) => {
         carbonTransaction.push(item2)
       })
     })
+    await Promise.all(promise)
     ctNetwork.gateway.disconnect()
     return carbonTransaction
   } catch (error) {
