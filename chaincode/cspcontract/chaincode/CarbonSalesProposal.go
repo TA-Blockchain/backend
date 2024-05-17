@@ -47,7 +47,7 @@ type Perusahaan struct {
 	IdEmisiKarbon       string   `json:"emisiKarbon"`
 	IdManajer           string   `json:"manajer"`
 	Kuota               int      `json:"kuota"`
-	SisaKuota           int      `json:"sisaKuota"`
+	SisaKuota           float64      `json:"sisaKuota"`
 }
 
 const (
