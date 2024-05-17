@@ -113,17 +113,22 @@ const getNotification = async (user) => {
           return JSON.parse(result)
         })
       )
+      const ctbp =
+        await carbonTransactionService.getCarbonTransactionByIdPenjualService(
+          user,
+          user.idPerusahaan
+        )
 
       const result = {
         carbonTransaction: bufferToJson(carbonTransactionQuery),
         supplyChainPending: transactionResults.filter(function (item) {
           return item.status == 'Menunggu Persetujuan Perusahaan'
         }),
-        carbonTransactionByProposal: carbonTransactionService
-          .getCarbonTransactionByIdPenjualService(user, user.idPerusahaan)
-          .filter(function (item) {
-            return (item.status = 'pending')
-          }),
+        carbonTransactionByProposal: ctbp
+          ? ctbp.filter(function (item) {
+              return (item.status = 'pending')
+            })
+          : null,
       }
 
       return iResp.buildSuccessResponse(
