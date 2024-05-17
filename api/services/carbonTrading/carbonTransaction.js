@@ -116,14 +116,14 @@ const verify = async (user, identifier) => {
   }
 }
 
-const getById = async (user, args) => {
+const getById = async (user, id) => {
   try {
     const network = await fabric.connectToNetwork(
       user.organizationName,
       'ctcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction('GetCTById', args)
+    const result = await network.contract.submitTransaction('GetCTById', id)
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,
@@ -204,7 +204,7 @@ const getCarbonTransactionByIdPenjualService = async (user, data) => {
       'cspcontract',
       user.username
     )
-    const carbonSalesProposal = JSON.parse(
+    const carbonSalesProposal = bufferToJson(
       await cspNetwork.contract.submitTransaction(
         'GetAllCSPByIdPerusahaan',
         idPerusahaan
@@ -212,6 +212,7 @@ const getCarbonTransactionByIdPenjualService = async (user, data) => {
     )
 
     cspNetwork.gateway.disconnect()
+
     const ctNetwork = await fabric.connectToNetwork(
       user.organizationName,
       'ctcontract',
@@ -220,11 +221,11 @@ const getCarbonTransactionByIdPenjualService = async (user, data) => {
 
     const carbonTransaction = []
     const promise = carbonSalesProposal.map(async (item) => {
-      const result = JSON.parse(
+      const result = bufferToJson(
         await ctNetwork.contract.submitTransaction('GetCTbyIdProposal', item.id)
       )
-      result.map((item2) => {
-        carbonTransaction.push(item2)
+      result.forEach((ct) => {
+        carbonTransaction.push(ct)
       })
     })
     await Promise.all(promise)
