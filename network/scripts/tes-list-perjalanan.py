@@ -2,7 +2,7 @@ from locust import HttpUser, task, between
 
 class TestListPerjalanan(HttpUser):
     wait_time = between(0.5, 3.0)
-    host = 'http://34.101.212.240:8000/api/v1'
+    host = 'http://34.101.232.196:8000/api/v1'
     
 
 
