@@ -77,7 +77,6 @@ const verify = async (user, identifier) => {
       .chaincode_spec.input.args
     const idCt = Buffer.from(argsCt[1]).toString()
 
-    console.log('ID Carbon Transaction: ', idCt)
     //query data ijazah, transkrip, nilai
     network.gateway.disconnect()
 
@@ -127,11 +126,13 @@ const getById = async (user, id) => {
       await network.contract.submitTransaction('GetCTById', id)
     )
 
+    console.log(result)
+
     const allSignatures = await fabric.getAllSignature(result.HistoryTxId)
 
     const resultWithTxIds = {
       ...result,
-      HistoryTxId: allSignatures,
+      signatures: allSignatures,
     }
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(

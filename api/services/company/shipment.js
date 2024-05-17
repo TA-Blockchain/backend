@@ -41,7 +41,7 @@ const getById = async (user, shipmentId) => {
 
     const resultWithSignature = {
       ...result,
-      TxId: signature,
+      signature,
     }
 
     network.gateway.disconnect()

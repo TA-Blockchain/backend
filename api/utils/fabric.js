@@ -137,7 +137,7 @@ const getSignature = async (txId) => {
 }
 
 const getAllSignature = async (txIds) => {
-  const lstTx = txIds
+  const lstTx = Array.from(txIds)
   await Promise.all(
     lstTx.map(async (item, index) => {
       lstTx[index] = await getSignature(item)
