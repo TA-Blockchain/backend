@@ -115,12 +115,32 @@ const approve = async (user, id, data) => {
     peNetwork.gateway.disconnect()
     company = JSON.parse(company)
 
-    await sendEmail(
-      company.email,
-      `Berikut ini adalah akun untuk website Carbon Supply Chain\n 
-      username: ${company.adminPerusahaan.username}\n 
-      Password: ${company.adminPerusahaan.password}`
-    )
+    const filePath = path.join(process.cwd(), 'wallet', 'user.txt');
+
+    fs.readFile(filePath, 'utf8', async (err, data) => {
+      if (err) {
+        console.error('Error reading the file:', err);
+        return;
+      }
+
+      // Split the file content by new lines
+      const lines = data.split('\n');
+
+      // Find the line that contains the desired username
+      const userLine = lines.find(line => line.startsWith(`${company.adminPerusahaan.username}~`));
+
+      const userPassword = userLine.split('~')[2];
+
+      if (userLine) {
+        await sendEmail(
+          company.email,
+          `Berikut ini adalah akun untuk website Carbon Supply Chain\n 
+          username: ${company.adminPerusahaan.username}\n 
+          Password: ${userPassword}`
+        )
+      } 
+    });
+
     return iResp.buildSuccessResponse(
       200,
       'Successfully approve a company',
