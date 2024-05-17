@@ -200,6 +200,8 @@ func getCompleteDataVehicle(ctx contractapi.TransactionContextInterface, vehicle
 
 	vehicleResult.IdDivisi = div
 
+	// response := ctx.GetStub().InvokeChaincode(PDContract, queryArgs, AcademicChannel)
+
 	return &vehicleResult, nil
 }
 
