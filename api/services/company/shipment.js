@@ -37,7 +37,10 @@ const getById = async (user, shipmentId) => {
       await network.contract.submitTransaction('GetShipmentById', shipmentId)
     )
 
-    const signature = await fabric.getSignature(result.TxId)
+    const needApproval = result.status === 'Need Approval'
+    const signature = needApproval
+      ? null
+      : await fabric.getSignature(result.TxId)
 
     const resultWithSignature = {
       ...result,
@@ -201,7 +204,6 @@ const complete = async (user, data) => {
       'vecontract',
       user.username
     )
-    // console.log(d ata)
     const vehicle = await veNetwork.contract.evaluateTransaction(
       'GetVehicleById',
       data.idVehicle
@@ -332,7 +334,6 @@ const verify = async (user, identifier) => {
       .chaincode_spec.input.args
     const idSh = Buffer.from(argsSh[1]).toString()
 
-    console.log('ID Shipment: ', idSh)
     //query data ijazah, transkrip, nilai
     network.gateway.disconnect()
 
@@ -360,7 +361,6 @@ const verify = async (user, identifier) => {
     }
     return iResp.buildSuccessResponse(200, 'Successfully get Shipment', result)
   } catch (error) {
-    console.log('ERROR', error)
     const result = {
       success: true,
       message: 'Invoice perjalanan tidak valid.',
