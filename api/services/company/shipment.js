@@ -239,6 +239,28 @@ const complete = async (user, data) => {
     const ceArgs = [uuidv4(), vehicleData.divisi.perusahaan, carbon, data.id]
 
     await ceNetwork.contract.submitTransaction('CreateCE', ...ceArgs)
+
+    const peNetwork = await fabric.connectToNetwork(
+      user.organizationName,
+      'pecontract',
+      user.username
+    )
+    const perusahaan = bufferToJson(
+      peNetwork.contract.submitTransaction(
+        'GetPerusahaanById',
+        vehicleData.divisi.perusahaan
+      )
+    )
+    const kuota = perusahaan.sisaKuota - carbon
+    let args = {
+      perusahaan: perusahaan.id,
+      kuota: kuota,
+    }
+    await peNetwork.contract.submitTransaction(
+      'UpdateSisaKuota',
+      JSON.stringify(args)
+    )
+    peNetwork.gateway.disconnect()
     return iResp.buildSuccessResponseWithoutData(
       200,
       'Successfully complete a shipment'
