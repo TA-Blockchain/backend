@@ -134,9 +134,9 @@ func (s *CSPContract) ReadAllCSP(ctx contractapi.TransactionContextInterface) ([
 	return constructQueryResponseFromIterator(resultsIterator)
 }
 
-func (s *CSPContract) GetAllCSPByIdPerusahaan(ctx contractapi.TransactionContextInterface,id string) ([]*CarbonSalesProposal, error) {
-	
-	queryString := fmt.Sprintf(`{"selector":{"idPerusahaan":"%s"}}`, id)
+func (s *CSPContract) GetAllCSPByIdPerusahaan(ctx contractapi.TransactionContextInterface) ([]*CarbonSalesProposal, error) {
+	args := ctx.GetStub().GetStringArgs()[1:]
+	queryString := fmt.Sprintf(`{"selector":{"idPerusahaan":"%s"}}`, args[0])
 	queryResult, err := getQueryResultForQueryString(ctx, queryString)
 	if err != nil {
 		return nil, err

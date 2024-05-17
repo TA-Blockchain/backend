@@ -201,7 +201,7 @@ const getCarbonTransactionByIdPenjualService = async (user, data) => {
     const idPerusahaan = data
     const cspNetwork = await fabric.connectToNetwork(
       user.organizationName,
-      'cspcontranct',
+      'cspcontract',
       user.username
     )
     const carbonSalesProposal = JSON.parse(
