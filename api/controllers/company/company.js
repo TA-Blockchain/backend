@@ -35,9 +35,8 @@ const reject = async (req, res) => {
 
 const update = async (req, res) => {
   const data = req.body
-  const id = uuidv4()
   const args = [
-    id,
+    data.id,
     data.nomorTelepon,
     data.email,
     data.nama,
@@ -49,6 +48,8 @@ const update = async (req, res) => {
     data.kuota,
     data.sisaKuota,
   ]
+
+  console.log(args)
   const result = await companyService.update(req.user.username, args)
 
   res.status(result.code).send(result)
