@@ -75,7 +75,7 @@ const verify = async (user, identifier) => {
     const argsCt = BlockDecoder.decode(blockCarbonTransaction).data.data[0]
       .payload.data.actions[0].payload.chaincode_proposal_payload.input
       .chaincode_spec.input.args
-    const idCt = Buffer.from(argsCt[1]).toString()
+    const idCt = JSON.parse(Buffer.from(argsCt[1]).toString()).id
 
     //query data ijazah, transkrip, nilai
     network.gateway.disconnect()
@@ -85,8 +85,6 @@ const verify = async (user, identifier) => {
       'ctcontract',
       user.username
     )
-
-    console.log(idCt)
   
     const ctResult = JSON.parse(
       await ctNetwork.contract.evaluateTransaction('GetCTById', idCt)
