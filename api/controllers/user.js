@@ -76,10 +76,6 @@ const editPassword = async (req, res) => {
   const result = await userService.editPassword(req.user, req.body)
   res.status(result.code).send(result)
 }
-const forgotPassword = async (req, res) => {
-  const result = await userService.forgotPassword(req.body.email)
-  res.status(result.code).send(result)
-}
 
 const editEmail = async (req, res) => {
   const result = await userService.editEmail(req.user, req.body)
@@ -113,7 +109,6 @@ module.exports = {
   registerUser,
   loginUser,
   editPassword,
-  forgotPassword,
   editEmail,
   getAllManagerByIdPerusahaan,
   getAllStafKementerian,

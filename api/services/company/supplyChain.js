@@ -11,7 +11,7 @@ const getList = async (user, args) => {
       'sccontract',
       user.username
     )
-    const result = await network.contract.submitTransaction('ReadAllSC')
+    const result = await network.contract.evaluateTransaction('ReadAllSC')
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,
@@ -29,7 +29,7 @@ const getById = async (user, args) => {
       'sccontract',
       user.username
     )
-    const result = await network.contract.submitTransaction('GetSCById', args)
+    const result = await network.contract.evaluateTransaction('GetSCById', args)
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,

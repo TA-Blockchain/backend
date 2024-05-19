@@ -12,7 +12,7 @@ const getList = async (user, idPerusahaan) => {
       'shcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetShipmentsByPerusahaan',
       idPerusahaan
     )
@@ -34,13 +34,11 @@ const getById = async (user, shipmentId) => {
       user.username
     )
     const result = JSON.parse(
-      await network.contract.submitTransaction('GetShipmentById', shipmentId)
+      await network.contract.evaluateTransaction('GetShipmentById', shipmentId)
     )
 
-    const needApproval = result.status === 'Need Approval'
-    const signature = needApproval
-      ? null
-      : await fabric.getSignature(result.TxId)
+    const isApproved = result.status === 'Approved'
+    const signature = isApproved ? await fabric.getSignature(result.TxId) : null
 
     const resultWithSignature = {
       ...result,
@@ -66,7 +64,7 @@ const getAllSHByDivisiPengirim = async (user, data) => {
       'shcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetAllSHByDivisiPengirim',
       idDivisi
     )
@@ -88,7 +86,7 @@ const getAllSHByDivisiPenerima = async (user, data) => {
       'shcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetAllSHByDivisiPenerima',
       idDivisi
     )
@@ -111,7 +109,7 @@ const getAllSHByVehicle = async (user, data) => {
       'shcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetAllSHByVehicle',
       idVehicle
     )
@@ -134,7 +132,7 @@ const GetAllSHByCompany = async (user, data) => {
       'shcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetAllSHByCompany',
       idPerusahaan
     )

@@ -10,7 +10,7 @@ const getList = async (user, args) => {
       'ctcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction('ReadAllCT')
+    const result = await network.contract.evaluateTransaction('ReadAllCT')
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,
@@ -123,7 +123,7 @@ const getById = async (user, id) => {
       user.username
     )
     const result = JSON.parse(
-      await network.contract.submitTransaction('GetCTById', id)
+      await network.contract.evaluateTransaction('GetCTById', id)
     )
 
     console.log(result)
@@ -152,7 +152,7 @@ const getCarbonTransactionByIdPerusahaan = async (user, idPerusahaan) => {
       'ctcontract',
       user.username
     )
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetCTbyIdPerusahaan',
       idPerusahaan
     )
@@ -178,7 +178,7 @@ const getCarbonTransactionByIdProposal = async (user, data) => {
       user.username
     )
 
-    const result = await network.contract.submitTransaction(
+    const result = await network.contract.evaluateTransaction(
       'GetCTbyIdProposal',
       idProposal
     )
@@ -215,7 +215,7 @@ const getCarbonTransactionByIdPenjualService = async (user, data) => {
       user.username
     )
     const carbonSalesProposal = bufferToJson(
-      await cspNetwork.contract.submitTransaction(
+      await cspNetwork.contract.evaluateTransaction(
         'GetAllCSPByIdPerusahaan',
         idPerusahaan
       )
@@ -232,7 +232,10 @@ const getCarbonTransactionByIdPenjualService = async (user, data) => {
     const carbonTransaction = []
     const promise = carbonSalesProposal.map(async (item) => {
       const result = bufferToJson(
-        await ctNetwork.contract.submitTransaction('GetCTbyIdProposal', item.id)
+        await ctNetwork.contract.evaluateTransaction(
+          'GetCTbyIdProposal',
+          item.id
+        )
       )
       result.forEach((ct) => {
         carbonTransaction.push(ct)
@@ -256,7 +259,7 @@ const getCarbonTransactionByStatusService = async (user, data) => {
       user.username
     )
 
-    const result = await ctNetwork.contract.submitTransaction(
+    const result = await ctNetwork.contract.evaluateTransaction(
       'GetAllCTByStatus',
       status
     )

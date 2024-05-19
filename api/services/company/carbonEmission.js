@@ -10,7 +10,7 @@ const getList = async (user, args) => {
       'cecontract',
       user.username
     )
-    const result = await network.contract.submitTransaction('ReadAllCE')
+    const result = await network.contract.evaluateTransaction('ReadAllCE')
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,
@@ -29,17 +29,17 @@ const GetCEByCompany = async (user, args) => {
       user.username
     )
     const result = JSON.parse(
-      await network.contract.submitTransaction('GetCEByPerusahaan', args)
+      await network.contract.evaluateTransaction('GetCEByPerusahaan', args)
     )
     const shNetwork = await fabric.connectToNetwork(
       user.organizationName,
       'shcontract',
       user.username
     )
-    
+
     const listPerjalanan = []
     for (let i = 0; i < result[0].perjalanan.length; i++) {
-      const perjalananResult = await shNetwork.contract.submitTransaction(
+      const perjalananResult = await shNetwork.contract.evaluateTransaction(
         'GetShipmentByIdNotFull',
         result[0].perjalanan[i]
       )
@@ -69,7 +69,7 @@ const getById = async (user, args) => {
       'cecontract',
       user.username
     )
-    const result = await network.contract.submitTransaction('GetCEById', args)
+    const result = await network.contract.evaluateTransaction('GetCEById', args)
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,

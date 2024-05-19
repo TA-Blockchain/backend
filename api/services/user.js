@@ -346,73 +346,6 @@ const editPassword = async (user, data) => {
   }
 }
 
-const forgotPassword = async (email) => {
-  try {
-    const network = await fabric.connectToNetwork(
-      'supplychain',
-      'usercontract',
-      'admin'
-    )
-    let user = await network.contract.submitTransaction(
-      'GetUserByEmail',
-      ...[email]
-    )
-    network.gateway.disconnect()
-
-    user = bufferToJson(user)
-
-    const ccp = await fabric.getCcp('supplychain')
-    const wallet = await fabric.getWallet('supplychain')
-
-    // Create a new CA client for interacting with the CA.
-    const caURL =
-      ccp.certificateAuthorities[
-        `ca.${'supplychain'.toLowerCase()}.example.com`
-      ].url
-    const ca = new FabricCAServices(
-      caURL,
-      undefined,
-      `ca.${'supplychain'.toLowerCase()}.example.com`
-    )
-
-    // Check to see if we've already enrolled the admin user.
-    const adminIdentity = await wallet.get('admin')
-    if (!adminIdentity) {
-      throw new Error('Admin network does not exist')
-    }
-
-    // build a user object for authenticating with the CA
-    const provider = wallet
-      .getProviderRegistry()
-      .getProvider(adminIdentity.type)
-    const adminUser = await provider.getUserContext(adminIdentity, 'admin')
-
-    // retrieve the registered identity
-    const identityService = ca.newIdentityService()
-
-    const password = crypto.randomBytes(4).toString('hex')
-    const encryptedPassword = await bcrypt.hash(password, 10)
-
-    const updateObj = {
-      affiliation: `${'supplychain'.toLowerCase()}.department1`,
-      role: 'client',
-      attrs: [
-        { name: 'userType', value: user.userType, ecert: true },
-        { name: 'password', value: encryptedPassword, ecert: true },
-      ],
-    }
-    identityService.update(user.username, updateObj, adminUser)
-    await sendEmail(email, `Berikut password terbaru Anda ${password}`)
-
-    return iResp.buildSuccessResponseWithoutData(
-      200,
-      'Successfully sent a new password'
-    )
-  } catch (error) {
-    return iResp.buildErrorResponse(500, 'Something wrong', error.message)
-  }
-}
-
 const editEmail = async (user, data) => {
   try {
     const network = await fabric.connectToNetwork(
@@ -462,7 +395,7 @@ const getAllManagerByIdPerusahaan = async (user) => {
     user.username
   )
 
-  let result = await network.contract.submitTransaction(
+  let result = await network.contract.evaluateTransaction(
     'GetManagersByCompanyId',
     user.idPerusahaan
   )
@@ -481,7 +414,7 @@ const getAllStafKementerian = async (user) => {
     user.username
   )
 
-  let result = await network.contract.submitTransaction('GetStafKementerian')
+  let result = await network.contract.evaluateTransaction('GetStafKementerian')
 
   return iResp.buildSuccessResponse(
     200,
@@ -556,7 +489,10 @@ const getById = async (user, args) => {
       'usercontract',
       user.username
     )
-    const result = await network.contract.submitTransaction('GetUserById', args)
+    const result = await network.contract.evaluateTransaction(
+      'GetUserById',
+      args
+    )
     network.gateway.disconnect()
     return iResp.buildSuccessResponse(
       200,
@@ -574,7 +510,6 @@ module.exports = {
   registerAdminKementrian,
   loginUser,
   editPassword,
-  forgotPassword,
   editEmail,
   getAllManagerByIdPerusahaan,
   getAllStafKementerian,

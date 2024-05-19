@@ -210,6 +210,11 @@ companyRouter.delete(
 // COMPANY
 companyRouter.get('/', auth.verifyToken, companyController.getList)
 companyRouter.get('/:companyId', auth.verifyToken, companyController.getById)
+companyRouter.put(
+  '/:companyId',
+  auth.onlyAdminPerusahaan,
+  companyController.update
+)
 companyRouter.post('/', companyController.create)
 
 companyRouter.put(
