@@ -196,7 +196,7 @@ function resolveSequence() {
 
   # if there are no committed versions, then set the sequence to 1
   if [ -z $COMMITTED_CC_SEQUENCE ]; then
-    CC_SEQUENCE=1
+    cc_sequence=2
     return 0
   fi
 
