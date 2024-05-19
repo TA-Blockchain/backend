@@ -85,14 +85,24 @@ const verify = async (user, identifier) => {
       'ctcontract',
       user.username
     )
-    const ct = await ctNetwork.contract.evaluateTransaction('GetCTById', idCt)
-    ctNetwork.gateway.disconnect()
-    const parseData = JSON.parse(ct)
 
-    parseData.signatures = await fabric.getAllSignature(parseData.HistoryTxId)
-    console.log(parseData)
+    console.log(idCt)
+  
+    const ctResult = JSON.parse(
+      await ctNetwork.contract.evaluateTransaction('GetCTById', idCt)
+    )
+
+    const allSignatures = await fabric.getAllSignature(ctResult.HistoryTxId)
+
+    const resultWithTxIds = {
+      ...ctResult,
+      signatures: allSignatures,
+    }
+
+    ctNetwork.gateway.disconnect()
+
     const data = {
-      carbonTransaction: parseData,
+      carbonTransaction: resultWithTxIds,
     }
 
     const result = {
@@ -125,8 +135,6 @@ const getById = async (user, id) => {
     const result = JSON.parse(
       await network.contract.evaluateTransaction('GetCTById', id)
     )
-
-    console.log(result)
 
     const allSignatures = await fabric.getAllSignature(result.HistoryTxId)
 
