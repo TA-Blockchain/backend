@@ -37,7 +37,7 @@ const getById = async (user, shipmentId) => {
       await network.contract.evaluateTransaction('GetShipmentById', shipmentId)
     )
 
-    const isApproved = result.status === 'Approved'
+    const isApproved = result.status === 'Completed'
     const signature = isApproved ? await fabric.getSignature(result.TxId) : null
 
     const resultWithSignature = {
