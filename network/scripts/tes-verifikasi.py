@@ -10,10 +10,10 @@ class TestCreateSupplyChain(HttpUser):
         global manajer_perusahaan
         global admin_perusahaan
       
-        response = self.client.post("/auth/login",  json= {"username": "mmm","password": "123"})
-        print("res",response.json())
-        manajer_perusahaan = response.json()['data']['token']
-        response = self.client.post("/auth/login",  json = {"username": "google","password": "123"})
+        # response = self.client.post("/auth/login",  json= {"username": "manager","password": "123"})
+        # print("res",response.json())
+        # manajer_perusahaan = response.json()['data']['token']
+        response = self.client.post("/auth/login",  json = {"username": "company","password": "123"})
         admin_perusahaan = response.json()['data']['token']
 
     def on_stop(self):
@@ -21,15 +21,15 @@ class TestCreateSupplyChain(HttpUser):
         pass
 
 
-    @task(1)
-    def verifikasi_perjalanan(self):
-        body = {
-                    "identifier": {
-                        "shipment" : "b322f7322595051d6dac61ed55ede1e2e2fab03baa03ca2f479e147449692203"
-                    }
-                }
-        headers = {'Authorization': f'{manajer_perusahaan}'}
-        response = self.client.post(f'/company/shipment/verify/',json=body , headers = headers )
+    # @task(1)
+    # def verifikasi_perjalanan(self):
+    #     body = {
+    #                 "identifier": {
+    #                     "shipment" : "d94d849acd3e2bdae47662d309af73d124e6e16763661ac3bd08217f6bb4b667"
+    #                 }
+    #             }
+    #     headers = {'Authorization': f'{manajer_perusahaan}'}
+    #     response = self.client.post(f'/company/shipment/verify/',json=body , headers = headers )
        
 
       
@@ -37,7 +37,7 @@ class TestCreateSupplyChain(HttpUser):
     def verifikasi_carbon_transaction(self):
         body = {
                 "identifier": {
-                    "carbonTransaction" : "a14edc8f82a8d68ca7e85b71a507fdb2f66cadb59fbd91d185ecde9ca68297e9"
+                    "carbonTransaction" : "a900cc30ec9e949d8feddb67a5e22f4de63d3ecfc76abeaccf0000eeb4023c6a"
                 }
               }
        

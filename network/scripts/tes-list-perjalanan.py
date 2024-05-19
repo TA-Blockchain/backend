@@ -10,7 +10,7 @@ class TestListPerjalanan(HttpUser):
         """ on_start is called when a Locust start before any task is scheduled """
         global ManajerPerusahaan
 
-        response = self.client.post("/auth/login",  json = {"username": "mmm","password": "123"})
+        response = self.client.post("/auth/login",  json = {"username": "manager","password": "123"})
         ManajerPerusahaan = response.json()['data']['token']
 
         
@@ -21,6 +21,6 @@ class TestListPerjalanan(HttpUser):
     @task(1)
     def list_shipment(self):
         
-        idPerusahaan = '5a8e4171-29ed-4d2d-8967-cf425e89348b'
+        idPerusahaan = 'e7d47eac-c56c-4c10-b1a9-a766bcb1d8f4'
         response = self.client.get(f'/company/shipment/company/{idPerusahaan}', headers = {'Authorization': f'{ManajerPerusahaan}'} )
         print(response.json())
