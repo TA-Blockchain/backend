@@ -211,18 +211,27 @@ const complete = async (user, data) => {
     // Calculate the carbon emission
     const distance = data.distance // km
     const fuelType = vehicle.fuelType // petrol | diesel
+    const carModel = vehicle.carModel
 
-    let fuelEfficiency = 0 // liter / km
+    // let fuelEfficiency = 0 // liter / km
+    // https://www.bing.com/ck/a?!&&p=2d2c54df952e41b7JmltdHM9MTcxNjA3NjgwMCZpZ3VpZD0yZTRjZTY5OS01NzE0LTZkMzQtMjUyMy1mMjE4NTY0MjZjNTgmaW5zaWQ9NTE5Mg&ptn=3&ver=2&hsh=3&fclid=2e4ce699-5714-6d34-2523-f21856426c58&psq=bp+Target+Neutral+Global+online+travel+calculator&u=a1aHR0cHM6Ly93d3cuYnAuY29tL2JwdGFyZ2V0bmV1dHJhbG5hdmFwcC9jb25zdW1lci9icFROX09ubGluZSUyMFRyYXZlbCUyMEdIRyUyMEVtaXNzaW9ucyUyMENhbGN1bGF0b3JfVXBkYXRlZCUyME1ldGhvZG9sb2d5JTIwU3RhdGVtZW50XzAxSnVseTIwMjEuOTYxYWNkNzEucGRm&ntb=1
     let emissionFactor = 0 // kgCO2e/liter
-    if (fuelType == 'petrol') {
-      fuelEfficiency = 20
-      emissionFactor = 3.1455
-    } else {
-      fuelEfficiency = 34
-      emissionFactor = 3.5117
+    if (carModel == 'car') {
+      if (fuelType == 'petrol') {
+        emissionFactor = 0.14158
+      } else {
+        emissionFactor = 0.13856
+      }
+    }
+    if (carModel == 'truck') {
+      if (fuelType == 'petrol') {
+        emissionFactor = 0.14238
+      } else {
+        emissionFactor = 0.13782
+      }
     }
 
-    const carbon = (fuelEfficiency / 100) * distance * emissionFactor
+    const carbon = distance * emissionFactor
 
     // Complete the shipment
     const shNetwork = await fabric.connectToNetwork(
