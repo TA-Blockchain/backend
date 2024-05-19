@@ -6,4 +6,4 @@ CCSTEP=$2
 
 cd network
 
-./network.sh deployCC -ccn $ARG -ccp ../chaincode/$ARG -ccl go -ccstep $CCSTEP 
+./network.sh deployCC -ccn $ARG -ccp ../chaincode/$ARG -ccl go -ccstep $CCSTEP -ccs 1

@@ -479,7 +479,6 @@ if [[ $# -ge 1 ]] ; then
   fi
 fi
 
-
 # parse flags
 
 while [[ $# -ge 1 ]] ; do
