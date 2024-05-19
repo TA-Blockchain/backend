@@ -72,7 +72,6 @@ type Perusahaan struct {
 	ApprovalStatus      int      `json:"approvalStatus"`
 	ParticipantStatus   int      `json:"participantStatus"`
 	SupplyChain         []string `json:"supplyChain"`
-	IdManajer           string   `json:"manajer"`
 	Kuota               int      `json:"kuota"`
 	SisaKuota           float64      `json:"sisaKuota"`
 }
