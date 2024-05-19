@@ -58,7 +58,6 @@ type PerusahaanResult struct {
 	ApprovalStatus      int                    `json:"approvalStatus"`
 	ParticipantStatus   int                    `json:"participantStatus"`
 	SupplyChain         []*SupplyChain         `json:"supplyChain"`
-	EmisiKarbon         *EmisiKarbon           `json:"emisiKarbon"`
 	AdminPerusahaan     *Admin                 `json:"adminPerusahaan"`
 	Kuota               int                    `json:"kuota"`
 	SisaKuota           float64                    `json:"sisaKuota"`
@@ -93,7 +92,6 @@ type Perusahaan struct {
 	ApprovalStatus      int      `json:"approvalStatus"`
 	ParticipantStatus   int      `json:"participantStatus"`
 	SupplyChain         []string `json:"supplyChain"`
-	IdEmisiKarbon       string   `json:"emisiKarbon"`
 	AdminPerusahaan     *Admin   `json:"adminPerusahaan"`
 	Kuota               int      `json:"kuota"`
 	SisaKuota           float64      `json:"sisaKuota"`
@@ -145,7 +143,6 @@ func (s *PEContract) CreatePerusahaan(ctx contractapi.TransactionContextInterfac
 		URLSuratProposal:    URLSuratProposal,
 		ApprovalStatus:      ApprovalStatus,
 		ParticipantStatus:   ParticipantStatus,
-		IdEmisiKarbon:       EmisiKarbon,
 		AdminPerusahaan:     adminPerusahaan,
 		Kuota:               Kuota,
 		SisaKuota:           sisaKuotaInt,
