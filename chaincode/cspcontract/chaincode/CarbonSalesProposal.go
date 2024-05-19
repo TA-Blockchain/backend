@@ -44,7 +44,6 @@ type Perusahaan struct {
 	ParticipantStatus   int      `json:"participantStatus"`
 	SupplyChain         []string `json:"supplyChain"`
 	ProposalSupplyChain []string `json:"proposalSupplyChain"`
-	IdEmisiKarbon       string   `json:"emisiKarbon"`
 	IdManajer           string   `json:"manajer"`
 	Kuota               int      `json:"kuota"`
 	SisaKuota           float64      `json:"sisaKuota"`
