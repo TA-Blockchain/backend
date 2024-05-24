@@ -49,7 +49,7 @@ function runHost2OrgContainer() {
   infoln "Starting docker container for All Organizations"
   println ""
 
-  COMPOSE_FILES="-f compose/multi-host/docker-compose-host2-supplychain.yaml"
+  COMPOSE_FILES="-f compose/multi-host/docker-compose-host2-supplychain.yaml -f compose/multi-host/docker-compose-host2-orderer.yaml"
   docker-compose ${COMPOSE_FILES} up -d 2>&1
 
   println ""
@@ -59,7 +59,7 @@ function runHost3OrgContainer() {
   infoln "Starting docker container for All Organizations"
   println ""
 
-  COMPOSE_FILES="-f compose/multi-host/docker-compose-host3-supplychain.yaml"
+  COMPOSE_FILES="-f compose/multi-host/docker-compose-host3-supplychain.yaml -f compose/multi-host/docker-compose-host3-orderer.yaml"
   docker-compose ${COMPOSE_FILES} up -d 2>&1
 
   println ""

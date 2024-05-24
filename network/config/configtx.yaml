@@ -39,6 +39,8 @@ Organizations:
 
     OrdererEndpoints:
       - 10.184.0.5:7050
+      - 10.184.0.6:8050
+      - 10.184.0.7:9050
 
   - &Kementrian
     # DefaultOrg defines the organization which is used in the sampleconfig
@@ -202,6 +204,8 @@ Orderer: &OrdererDefaults
   # to include the OrdererEndpoints item in your org definition
   Addresses:
     - 10.184.0.5:7050
+    - 10.184.0.6:8050
+    - 10.184.0.7:9050
 
   EtcdRaft:
     Consenters:
@@ -209,6 +213,16 @@ Orderer: &OrdererDefaults
         Port: 7050
         ClientTLSCert: ../organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
         ServerTLSCert: ../organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
+
+      - Host: 10.184.0.6
+        Port: 8050
+        ClientTLSCert: ../organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
+        ServerTLSCert: ../organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
+
+      - Host: 10.184.0.7
+        Port: 9050
+        ClientTLSCert: ../organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
+        ServerTLSCert: ../organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
   # Batch Timeout: The amount of time to wait before creating a batch
   BatchTimeout: 2s
   # Batch Size: Controls the number of messages batched into a block
@@ -293,6 +307,16 @@ Profiles:
             Port: 7050
             ClientTLSCert: ../organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
             ServerTLSCert: ../organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
+
+          - Host: orderer2.example.com
+            Port: 8050
+            ClientTLSCert: ../organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
+            ServerTLSCert: ../organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
+          
+          - Host: orderer3.example.com
+            Port: 9050
+            ClientTLSCert: ../organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
+            ServerTLSCert: ../organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
       Organizations:
         - *OrdererOrg
       Capabilities: *OrdererCapabilities
