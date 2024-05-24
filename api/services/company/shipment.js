@@ -233,6 +233,10 @@ const complete = async (user, data) => {
 
     const carbon = distance * emissionFactor
 
+    console.log(carbon)
+    console.log(distance)
+    console.log(emissionFactor)
+
     // Complete the shipment
     const shNetwork = await fabric.connectToNetwork(
       user.organizationName,
