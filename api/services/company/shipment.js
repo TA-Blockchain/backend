@@ -202,10 +202,10 @@ const complete = async (user, data) => {
       'vecontract',
       user.username
     )
-    const vehicle = await veNetwork.contract.evaluateTransaction(
+    const vehicle = JSON.parse(await veNetwork.contract.evaluateTransaction(
       'GetVehicleById',
       data.idVehicle
-    )
+    ))
     console.log(data.idVehicle)
     console.log(vehicle)
     veNetwork.gateway.disconnect()
