@@ -216,14 +216,14 @@ const complete = async (user, data) => {
     // let fuelEfficiency = 0 // liter / km
     // https://www.bing.com/ck/a?!&&p=2d2c54df952e41b7JmltdHM9MTcxNjA3NjgwMCZpZ3VpZD0yZTRjZTY5OS01NzE0LTZkMzQtMjUyMy1mMjE4NTY0MjZjNTgmaW5zaWQ9NTE5Mg&ptn=3&ver=2&hsh=3&fclid=2e4ce699-5714-6d34-2523-f21856426c58&psq=bp+Target+Neutral+Global+online+travel+calculator&u=a1aHR0cHM6Ly93d3cuYnAuY29tL2JwdGFyZ2V0bmV1dHJhbG5hdmFwcC9jb25zdW1lci9icFROX09ubGluZSUyMFRyYXZlbCUyMEdIRyUyMEVtaXNzaW9ucyUyMENhbGN1bGF0b3JfVXBkYXRlZCUyME1ldGhvZG9sb2d5JTIwU3RhdGVtZW50XzAxSnVseTIwMjEuOTYxYWNkNzEucGRm&ntb=1
     let emissionFactor = 0 // Distance Based Emission Factor kgCO2e/km
-    if (carModel == 'car') {
+    if (carModel == 'Mobil Biasa') {
       if (fuelType == 'petrol') {
         emissionFactor = 0.14158
       } else {
         emissionFactor = 0.13856
       }
     }
-    if (carModel == 'truck') {
+    if (carModel == 'Truk Ringan') {
       if (fuelType == 'petrol') {
         emissionFactor = 0.14238
       } else {
