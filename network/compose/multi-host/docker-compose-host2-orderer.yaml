@@ -1,0 +1,33 @@
+version: "3.7"
+
+volumes:
+  orderer.example.com:
+
+networks:
+  supply_chain_carbon:
+    name: supply_chain_carbon
+    external: true
+
+services:
+  orderer.example.com:
+    container_name: orderer2.example.com
+    extends:
+      file: docker-compose-base.yaml
+      service: orderer-base
+    environment:
+      - ORDERER_GENERAL_LISTENPORT=8050
+      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:8053
+      - ORDERER_OPERATIONS_LISTENADDRESS=orderer2.example.com:10443
+    working_dir: /root
+    command: orderer
+    volumes:
+      - ../../channel-artifacts/carbonchannel.block:/etc/hyperledger/orderer/orderer.genesis.block
+      - ../../organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp:/etc/hyperledger/orderer/msp
+      - ../../organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/:/etc/hyperledger/orderer/tls
+      - orderer2.example.com:/var/hyperledger/production/orderer
+    ports:
+      - 8050:8050
+      - 8053:8053
+      - 10443:10443
+    networks:
+      - supply_chain_carbon
