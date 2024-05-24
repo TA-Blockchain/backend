@@ -253,9 +253,7 @@ const complete = async (user, data) => {
       user.username
     )
 
-    const vehicleData = JSON.parse(vehicle)
-
-    const ceArgs = [uuidv4(), vehicleData.divisi.perusahaan, carbon, data.id]
+    const ceArgs = [uuidv4(), vehicle.divisi.perusahaan, carbon, data.id]
 
     await ceNetwork.contract.submitTransaction('CreateCE', ...ceArgs)
 
@@ -267,7 +265,7 @@ const complete = async (user, data) => {
     const perusahaan = JSON.parse(
       await peNetwork.contract.submitTransaction(
         'GetPerusahaanById',
-        vehicleData.divisi.perusahaan
+        vehicle.divisi.perusahaan
       )
     )
 
@@ -286,7 +284,6 @@ const complete = async (user, data) => {
       'Successfully complete a shipment'
     )
   } catch (error) {
-    console.log(error)
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
   }
 }
