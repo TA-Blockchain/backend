@@ -202,12 +202,12 @@ const complete = async (user, data) => {
       'vecontract',
       user.username
     )
-    const vehicle = JSON.parse(await veNetwork.contract.evaluateTransaction(
+    const vehicle = await veNetwork.contract.evaluateTransaction(
       'GetVehicleById',
       data.idVehicle
-    ))
-    console.log(data.idVehicle)
-    console.log(vehicle)
+    )
+
+
     veNetwork.gateway.disconnect()
 
     // Calculate the carbon emission
@@ -236,8 +236,6 @@ const complete = async (user, data) => {
     }
 
     const carbon = distance * emissionFactor
-
-   
 
     // Complete the shipment
     const shNetwork = await fabric.connectToNetwork(
@@ -289,6 +287,7 @@ const complete = async (user, data) => {
       'Successfully complete a shipment'
     )
   } catch (error) {
+    console.log(error)
     return iResp.buildErrorResponse(500, 'Something wrong', error.message)
   }
 }
