@@ -206,6 +206,8 @@ const complete = async (user, data) => {
       'GetVehicleById',
       data.idVehicle
     )
+    console.log(data.idVehicle)
+    console.log(vehicle)
     veNetwork.gateway.disconnect()
 
     // Calculate the carbon emission
@@ -213,8 +215,7 @@ const complete = async (user, data) => {
     const fuelType = vehicle.fuelType // petrol | diesel
     const carModel = vehicle.carModel
 
-    console.log(carModel)
-    console.log(fuelType)
+ 
 
     // let fuelEfficiency = 0 // liter / km
     // https://www.bing.com/ck/a?!&&p=2d2c54df952e41b7JmltdHM9MTcxNjA3NjgwMCZpZ3VpZD0yZTRjZTY5OS01NzE0LTZkMzQtMjUyMy1mMjE4NTY0MjZjNTgmaW5zaWQ9NTE5Mg&ptn=3&ver=2&hsh=3&fclid=2e4ce699-5714-6d34-2523-f21856426c58&psq=bp+Target+Neutral+Global+online+travel+calculator&u=a1aHR0cHM6Ly93d3cuYnAuY29tL2JwdGFyZ2V0bmV1dHJhbG5hdmFwcC9jb25zdW1lci9icFROX09ubGluZSUyMFRyYXZlbCUyMEdIRyUyMEVtaXNzaW9ucyUyMENhbGN1bGF0b3JfVXBkYXRlZCUyME1ldGhvZG9sb2d5JTIwU3RhdGVtZW50XzAxSnVseTIwMjEuOTYxYWNkNzEucGRm&ntb=1
