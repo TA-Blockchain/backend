@@ -8,10 +8,10 @@ class TestListPerjalanan(HttpUser):
 
     def on_start(self):
         """ on_start is called when a Locust start before any task is scheduled """
-        global ManajerPerusahaan
+        # global ManajerPerusahaan
 
-        response = self.client.post("/auth/login",  json = {"username": "manager","password": "123"})
-        ManajerPerusahaan = response.json()['data']['token']
+        # response = self.client.post("/auth/login",  json = {"username": "manager","password": "123"})
+        # ManajerPerusahaan = response.json()['data']['token']
 
         
     def on_stop(self):
@@ -21,6 +21,6 @@ class TestListPerjalanan(HttpUser):
     @task(1)
     def list_shipment(self):
         
-        idPerusahaan = 'e7d47eac-c56c-4c10-b1a9-a766bcb1d8f4'
-        response = self.client.get(f'/company/shipment/company/{idPerusahaan}', headers = {'Authorization': f'{ManajerPerusahaan}'} )
+        idPerusahaan = 'c41a847b-b17e-4087-b7f2-347a814305be'
+        response = self.client.get(f'/company/shipment/company/{idPerusahaan}', headers = {'Authorization': f'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJkMDBkYjhhLTdiNDktNGJiOS05Y2IyLTI2NDIyOWM1NzE1OCIsInVzZXJuYW1lIjoibWFuYWplcjEiLCJlbWFpbCI6Im1hbmFqZXIxQGdtYWlsLmNvbSIsInVzZXJUeXBlIjoibWFuYWdlci1wZXJ1c2FoYWFuIiwib3JnYW5pemF0aW9uTmFtZSI6InN1cHBseWNoYWluIiwibmlrIjoiIiwiaWREaXZpc2kiOiIzYTlhOGNkMC01ZjY3LTRkZGYtYTNmYi1lNjM0MmQ5MzA3ODEiLCJpZFBlcnVzYWhhYW4iOiJjNDFhODQ3Yi1iMTdlLTQwODctYjdmMi0zNDdhODE0MzA1YmUiLCJpZFBlcmphbGFuYW4iOltdLCJpYXQiOjE3MTY2NDgxNDIsImV4cCI6MTcxNjY1NTM0Mn0.Gh31CVK03_pmOt7NFP5bNwJ6s3UpBmRcRqNueFz69Wk'} )
         print(response.json())

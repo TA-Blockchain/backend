@@ -7,14 +7,14 @@ class TestCreateSupplyChain(HttpUser):
 
     def on_start(self):
         """ on_start is called when a Locust start before any task is scheduled """
-        global manajer_perusahaan
-        global admin_perusahaan
+        # global manajer_perusahaan
+        # global admin_perusahaan
       
         # response = self.client.post("/auth/login",  json= {"username": "manager","password": "123"})
         # print("res",response.json())
         # manajer_perusahaan = response.json()['data']['token']
-        response = self.client.post("/auth/login",  json = {"username": "company","password": "123"})
-        admin_perusahaan = response.json()['data']['token']
+        # response = self.client.post("/auth/login",  json = {"username": "company","password": "123"})
+        # admin_perusahaan = response.json()['data']['token']
 
     def on_stop(self):
         """ on_stop is called when the TaskSet is stopping """
@@ -25,10 +25,10 @@ class TestCreateSupplyChain(HttpUser):
     # def verifikasi_perjalanan(self):
     #     body = {
     #                 "identifier": {
-    #                     "shipment" : "d94d849acd3e2bdae47662d309af73d124e6e16763661ac3bd08217f6bb4b667"
+    #                     "shipment" : "0fdd07c585769886ed3ddeeea78416e7cf138515c86cc9da1079c12f4ac59f84"
     #                 }
     #             }
-    #     headers = {'Authorization': f'{manajer_perusahaan}'}
+    #     headers = {'Authorization': f'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJkMDBkYjhhLTdiNDktNGJiOS05Y2IyLTI2NDIyOWM1NzE1OCIsInVzZXJuYW1lIjoibWFuYWplcjEiLCJlbWFpbCI6Im1hbmFqZXIxQGdtYWlsLmNvbSIsInVzZXJUeXBlIjoibWFuYWdlci1wZXJ1c2FoYWFuIiwib3JnYW5pemF0aW9uTmFtZSI6InN1cHBseWNoYWluIiwibmlrIjoiIiwiaWREaXZpc2kiOiIzYTlhOGNkMC01ZjY3LTRkZGYtYTNmYi1lNjM0MmQ5MzA3ODEiLCJpZFBlcnVzYWhhYW4iOiJjNDFhODQ3Yi1iMTdlLTQwODctYjdmMi0zNDdhODE0MzA1YmUiLCJpZFBlcmphbGFuYW4iOltdLCJpYXQiOjE3MTY2NDgxNDIsImV4cCI6MTcxNjY1NTM0Mn0.Gh31CVK03_pmOt7NFP5bNwJ6s3UpBmRcRqNueFz69Wk'}
     #     response = self.client.post(f'/company/shipment/verify/',json=body , headers = headers )
        
 
@@ -37,11 +37,11 @@ class TestCreateSupplyChain(HttpUser):
     def verifikasi_carbon_transaction(self):
         body = {
                 "identifier": {
-                    "carbonTransaction" : "a900cc30ec9e949d8feddb67a5e22f4de63d3ecfc76abeaccf0000eeb4023c6a"
+                    "carbonTransaction" : "de290ad331953925853cd029f7051e46188a70ad94ede746bf99dd14a80079d1"
                 }
               }
        
         
-        headers = {'Authorization': f'{admin_perusahaan}'}
+        headers = {'Authorization': f'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJmZGFiNjQ2LTc5YTEtNDk4ZC04YTc4LTU1ZWNkYzdlNDE0YyIsInVzZXJuYW1lIjoiY29tcGFueTEiLCJlbWFpbCI6ImNvbXBhbnkxQGdtYWlsLmNvbSIsInVzZXJUeXBlIjoiYWRtaW4tcGVydXNhaGFhbiIsIm9yZ2FuaXphdGlvbk5hbWUiOiJzdXBwbHljaGFpbiIsImlkUGVydXNhaGFhbiI6ImM0MWE4NDdiLWIxN2UtNDA4Ny1iN2YyLTM0N2E4MTQzMDViZSIsImlhdCI6MTcxNjY0ODQ4MywiZXhwIjoxNzE2NjU1NjgzfQ.VKCuBjnUeLVSx1Ud4UGnPsJoeOCif-cw2ffsxHhDNcs'}
         response = self.client.post(f'/carbon_trading/transactions/verify',json=body, headers = headers )
         

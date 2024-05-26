@@ -54,6 +54,11 @@ const create = async (req, res) => {
   res.status(result.code).send(result)
 }
 
+const DeleteAllShipment = async (req, res) => {
+  const result = await shipmentService.DeleteAllShipment(req.user)
+  res.status(result.code).send(result)
+}
+
 const updateStatus = async (req, res) => {
   const result = await shipmentService.updateStatus(req.user, req.body)
 
@@ -91,5 +96,6 @@ module.exports = {
   getAllSHByVehicle,
   getAllSHByCompany,
   generateIdentifier,
+  DeleteAllShipment,
   verify,
 }

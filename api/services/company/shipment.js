@@ -101,6 +101,26 @@ const getAllSHByDivisiPenerima = async (user, data) => {
   }
 }
 
+const DeleteAllShipment = async (user) => {
+  try {
+    
+    const network = await fabric.connectToNetwork(
+      user.organizationName,
+      'shcontract',
+      user.username
+    )
+    const result = await network.contract.evaluateTransaction(
+      'DeleteAllShipment')
+    network.gateway.disconnect()
+    return iResp.buildSuccessResponse(
+      200,
+      `Successfully Delete All shipment`,
+    )
+  } catch (error) {
+    return iResp.buildErrorResponse(500, 'Something wrong', error.message)
+  }
+}
+
 const getAllSHByVehicle = async (user, data) => {
   try {
     const idVehicle = data
@@ -389,4 +409,5 @@ module.exports = {
   GetAllSHByCompany,
   generateIdentifier,
   verify,
+  DeleteAllShipment
 }

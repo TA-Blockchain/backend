@@ -600,40 +600,22 @@ func (s *SHContract) DeleteShipment(ctx contractapi.TransactionContextInterface)
 
 	return err
 }
-// func (s *SHContract) SeedDb(ctx contractapi.TransactionContextInterface) error {
-// 	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+func (s *SHContract) DeleteAllShipment(ctx contractapi.TransactionContextInterface) error {
 	
-// 	string idPerusahaan := "7f5c4a2b-3e4d-4b8b-9a0a-1e8f9e6f5d0a"
-// 	string idSupplyChain := "8a3e8b6d-2g5d-6b8b-9f5c-2g8f9e6f5d0a"
-// 	for i:=1; i < 100000; i++ {
-// 		perjalanan := Perjalanan{
-// 			ID:               uuid.New(),
-// 			IdPerusahaan: 	  idPerusahaan,
-// 			IdSupplyChain:    idSupplyChain,
-// 			IdDivisiPengirim: uuid.New(),
-// 			IdDivisiPenerima: uuid.New(),
-// 			Status:           "Selesai",
-// 			WaktuBerangkat:   time.Now().Format(time.RFC3339),
-// 			IdTransportasi:   uuid.New(),
-// 			BeratMuatan:      100,
-// 		}
+	resultsIterator, err := ctx.GetStub().GetStateByRange("", "")
+	if err != nil {
+		return shim.Error(fmt.Sprintf("Error getting keys: %s", err))
+	}
+	defer resultsIterator.Close()
 
-// 		perjalananJSON, err := json.Marshal(perjalanan)
-// 		if err != nil {
-// 			return err
-// 		}
+	for resultsIterator.HasNext() {
+		key, _ := resultsIterator.Next()
+		err := ctx.GetStub().DelState(key.Key)
+		if err != nil {
+			return shim.Error(fmt.Sprintf("Error deleting key %s: %s", key, err))
+		}
+	}
+	return shim.Success([]byte("All data deleted successfully."))
+}
 
-// 		err = ctx.GetStub().PutState(id, perjalananJSON)
-// 		if err != nil {
-// 			fmt.Errorf(err.Error())
-// 		}
-
-// 	}
-// }
-// func RandString(n int) string {
-//     b := make([]byte, n)
-//     for i := range b {
-//         b[i] = letterBytes[rand.Intn(len(letterBytes))]
-//     }
-//     return string(b)
-// }

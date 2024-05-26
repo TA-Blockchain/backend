@@ -78,6 +78,12 @@ companyRouter.get(
   shipmentController.getList
 )
 
+companyRouter.delete(
+  '/shipment/reset',
+  auth.onlyStafKementerian,
+  shipmentController.DeleteAllShipment
+)
+
 companyRouter.get(
   '/shipment/detail/:shipmentId',
   auth.verifyToken,
