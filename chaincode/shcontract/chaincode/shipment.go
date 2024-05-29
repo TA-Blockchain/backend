@@ -605,7 +605,7 @@ func (s *SHContract) DeleteAllShipment(ctx contractapi.TransactionContextInterfa
 	
 	resultsIterator, err := ctx.GetStub().GetStateByRange("", "")
 	if err != nil {
-		return shim.Error(fmt.Sprintf("Error getting keys: %s", err))
+		return err
 	}
 	defer resultsIterator.Close()
 
@@ -613,9 +613,9 @@ func (s *SHContract) DeleteAllShipment(ctx contractapi.TransactionContextInterfa
 		key, _ := resultsIterator.Next()
 		err := ctx.GetStub().DelState(key.Key)
 		if err != nil {
-			return shim.Error(fmt.Sprintf("Error deleting key %s: %s", key, err))
+			return err
 		}
 	}
-	return shim.Success([]byte("All data deleted successfully."))
+	return nil
 }
 
