@@ -132,6 +132,8 @@ Untuk keperluan pengembangan backend CarbonChain, silahkan kunjungi folder `/api
    ./down.sh
    ```
 
-Sesuai dengan langkah-langkah di atas, komponen blockchain CarbonChain Anda seharusnya telah berhasil di-deploy dan siap untuk digunakan. Pastikan untuk memantau dan melakukan penyesuaian sesuai kebutuhan.
+Dengan mengikuti langkah-langkah di atas, komponen blockchain CarbonChain Anda seharusnya telah berhasil di-deploy dan siap untuk digunakan. Pastikan untuk memantau dan melakukan penyesuaian sesuai kebutuhan.
 
 User manual komponen backend dan blockchain CarbonChain dapat diakses pada [tautan berikut](https://docs.google.com/document/d/1ILKaH_aOwE_MaMkDin_JLQ4_XWNPWOAv-tbkZLdbMeg/edit?usp=sharing).
+
+Cara menambahkan node baru ke dalam jaringan blockchain CarbonChain dapat dilihat pada [tautan berikut](https://github.com/TA-Blockchain/backend/blob/main/network/new-node.md)
